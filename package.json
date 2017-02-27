@@ -1,0 +1,37 @@
+{
+  "name": "node-cloop-gen",
+  "version": "0.0.1-alpha.1",
+  "description": "cloop generator for Node.js",
+  "main": "dist/lib/index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "build:w": "npm run clean && tsc -w",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asfernandes/node-cloop-gen.git"
+  },
+  "keywords": [
+    "cloop"
+  ],
+  "author": {
+    "name": "Adriano dos Santos Fernandes",
+    "email": "adrianosf@gmail.com",
+    "url": "https://asfernandes.github.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asfernandes/node-cloop-gen/issues"
+  },
+  "homepage": "https://github.com/asfernandes/node-cloop-gen#readme",
+  "typings": "./dist/lib/index.d.ts",
+  "dependencies": {
+    "@types/node": "^7.0.5"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "^2.2.1"
+  }
+}
