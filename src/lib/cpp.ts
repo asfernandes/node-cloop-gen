@@ -17,7 +17,7 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 
 		out.write(`class ${intf.name} : public BaseClass<${intf.name}, ${options.namespace}::I${intf.name}>\n`);
 		out.write('{\n');
-		out.write('friend class BaseClass;\n');
+		out.write(`friend class BaseClass<${intf.name}, ${options.namespace}::I${intf.name}>;\n`);
 		out.write('\n');
 		out.write('private:\n');
 		out.write('\tstatic void InitPrototype(v8::Local<v8::FunctionTemplate>& tpl);\n');
