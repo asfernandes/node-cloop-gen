@@ -46,6 +46,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 						case 'void':
 						case 'uchar':
 						case 'boolean':
+						default:
 							out.write('Uint8Array | Pointer');
 							handled = true;
 							break;

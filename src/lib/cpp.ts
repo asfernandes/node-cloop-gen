@@ -105,6 +105,12 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 							out.write(`\tauto* ${param.name} = getAddress<uint64_t>(info[${paramNumber}]);`);
 							handled = true;
 							break;
+
+						default:
+							out.write(`\tauto* ${param.name} = (${syncReturn(options, param.type)}) `+
+								`getAddress<unsigned char>(info[${paramNumber}]);`);
+							handled = true;
+							break;
 					}
 				}
 				else {
@@ -315,32 +321,33 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 }
 
 function syncReturn(options: Options, type: Type): string {
+	let typeName: string;
+
+	if (options.library.interfacesByName[type.name])
+		typeName = `${options.namespace}::I${type.name}*`;
+	else if (type.name == 'boolean')
+		typeName = 'FB_BOOLEAN';
+	else if (type.name == 'uchar')
+		typeName = 'unsigned char';
+	else if (type.name == 'int')
+		typeName = 'int';
+	else if (type.name == 'uint')
+		typeName = 'unsigned';
+	else if (type.name == 'int64')
+		typeName = 'int64_t';
+	else if (type.name == 'uint64')
+		typeName = 'uint64_t';
+	else if (type.name == 'string')
+		typeName = 'std::string';
+	else
+		typeName = type.name;
+
 	if (type.isPointer) {
 		const modifier = type.isConst ? 'const ' : '';
-
-		if (type.name == 'uchar')
-			return `${modifier}unsigned char*`;
-	}
-	else {
-		if (options.library.interfacesByName[type.name])
-			return `${options.namespace}::I${type.name}*`;
-		else if (type.name == 'boolean')
-			return 'FB_BOOLEAN';
-		else if (type.name == 'uchar')
-			return 'unsigned char';
-		else if (type.name == 'int')
-			return 'int';
-		else if (type.name == 'uint')
-			return 'unsigned';
-		else if (type.name == 'int64')
-			return 'int64_t';
-		else if (type.name == 'uint64')
-			return 'uint64_t';
-		else if (type.name == 'string')
-			return 'std::string';
+		typeName = `${modifier}${typeName}*`;
 	}
 
-	return null;
+	return typeName;
 }
 
 function asyncReturn(options: Options, type: Type): string {
