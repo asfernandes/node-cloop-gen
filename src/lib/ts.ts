@@ -47,17 +47,17 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 						case 'uchar':
 						case 'boolean':
 						default:
-							out.write('Uint8Array | Pointer');
+							out.write('Uint8Array | Pointer | undefined');
 							handled = true;
 							break;
 
 						case 'int':
-							out.write('Int32Array');
+							out.write('Int32Array | undefined');
 							handled = true;
 							break;
 
 						case 'uint':
-							out.write('Uint32Array');
+							out.write('Uint32Array | undefined');
 							handled = true;
 							break;
 					}
@@ -65,7 +65,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 				else
 				{
 					if (options.library.interfacesByName[param.type.name]) {
-						out.write(param.type.name);
+						out.write(`${param.type.name} | undefined`);
 						handled = true;
 					}
 					else {
@@ -86,7 +86,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 
 							case 'string':
 								if (param.type.isConst) {
-									out.write('string');
+									out.write('string | undefined');
 									handled = true;
 								}
 								break;
@@ -126,7 +126,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 			}
 			else if (!method.returnType.isPointer) {
 				if (options.library.interfacesByName[method.returnType.name]) {
-					out.write(method.returnType.name);
+					out.write(`${method.returnType.name} | undefined`);
 					handled = true;
 				}
 				else
@@ -148,7 +148,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 
 						case 'string':
 							if (method.returnType.isConst) {
-								out.write('string');
+								out.write('string | undefined');
 								handled = true;
 							}
 							break;
@@ -158,7 +158,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 			else {	// pointer
 				switch (method.returnType.name) {
 					case 'uchar':
-						out.write('Pointer');
+						out.write('Pointer | undefined');
 						handled = true;
 						break;
 				}
