@@ -28,10 +28,10 @@
   "homepage": "https://github.com/asfernandes/node-cloop-gen#readme",
   "typings": "./dist/lib/index.d.ts",
   "dependencies": {
-    "@types/node": "^8.0.7"
+    "@types/node": "^8.10.19"
   },
   "devDependencies": {
-    "rimraf": "^2.6.1",
-    "typescript": "^2.4.1"
+    "rimraf": "^2.6.2",
+    "typescript": "^2.9.1"
   }
 }
