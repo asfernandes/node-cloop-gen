@@ -122,27 +122,27 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 					else {
 						switch (param.type.name) {
 							case 'int':
-								out.write(`\tint ${param.name} = info[${paramNumber}]->NumberValue();`);
+								out.write(`\tint ${param.name} = (int) info[${paramNumber}]->NumberValue();`);
 								handled = true;
 								break;
 
 							case 'uint':
-								out.write(`\tunsigned ${param.name} = info[${paramNumber}]->NumberValue();`);
+								out.write(`\tunsigned ${param.name} = (unsigned) info[${paramNumber}]->NumberValue();`);
 								handled = true;
 								break;
 
 							case 'uchar':
-								out.write(`\tunsigned char ${param.name} = info[${paramNumber}]->NumberValue();`);
+								out.write(`\tunsigned char ${param.name} = (unsigned char) info[${paramNumber}]->NumberValue();`);
 								handled = true;
 								break;
 
 							case 'int64':
-								out.write(`\tint64_t ${param.name} = info[${paramNumber}]->NumberValue();`);
+								out.write(`\tint64_t ${param.name} = (int64_t) info[${paramNumber}]->NumberValue();`);
 								handled = true;
 								break;
 
 							case 'uint64':
-								out.write(`\tuint64_t ${param.name} = info[${paramNumber}]->NumberValue();`);
+								out.write(`\tuint64_t ${param.name} = (uint64_t) info[${paramNumber}]->NumberValue();`);
 								handled = true;
 								break;
 
