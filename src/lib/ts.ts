@@ -4,6 +4,7 @@ import { Expr, Interface } from './library';
 
 export function generateTs(options: Options, out: NodeJS.WritableStream) {
 	out.write('// Auto-generated file. Do not edit!\n\n');
+	out.write('/* tslint:disable:max-line-length */\n\n');
 
 	out.write('export interface Pointer {\n');
 	//// FIXME: put some method (symbol) to make the interface unique.
