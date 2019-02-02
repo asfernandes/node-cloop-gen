@@ -31,7 +31,7 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 				out.write(`\tstatic NAN_METHOD(${method.name});\n`);
 			else {
 				out.write(`\tstatic MethodStart<${asyncReturn(options, method.returnType)}> ` +
-					`${method.name}Start(Nan::NAN_METHOD_ARGS_TYPE info);\n`);
+					`${method.name}Start(bool async, Nan::NAN_METHOD_ARGS_TYPE info);\n`);
 
 				out.write(`\tstatic v8::Local<v8::Value> ${method.name}Finish(${asyncReturn(options, method.returnType)} ret);\n`);
 			}
@@ -65,19 +65,24 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 				out.write(`NAN_METHOD(${intf.name}::${method.name}${method.async ? 'Sync' : ''})\n`);
 			else {
 				out.write(`MethodStart<${asyncReturn(options, method.returnType)}> ${intf.name}::${method.name}` +
-					`Start(Nan::NAN_METHOD_ARGS_TYPE info)\n`);
+					`Start(bool async, Nan::NAN_METHOD_ARGS_TYPE info)\n`);
 			}
 
 			out.write('{\n');
 			out.write(`\tauto* obj = ObjectWrap::Unwrap<${intf.name}>(info.This());\n`);
 
 			let paramNumber = 0;
+			let hasSharedPtr = false;
 
 			for (const param of method.parameters) {
 				let handled = false;
 
 				if (param.type.isPointer) {
-					//// FIXME: must copy getAddress's data for async usage???
+					if (method.async) {
+						hasSharedPtr = true;
+						out.write(`\tstd::shared_ptr<Nan::Persistent<v8::Value>> ${param.name}Persistent;\n`);
+					}
+
 					switch (param.type.name) {
 						case 'void':
 						case 'uchar':
@@ -181,12 +186,40 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 				++paramNumber;
 			}
 
+			if (hasSharedPtr)
+			{
+				out.write(`\n`);
+				out.write(`\tif (async)\n`);
+				out.write(`\t{\n`);
+
+				paramNumber = 0;
+
+				for (const param of method.parameters) {
+					if (param.type.isPointer)
+					{
+						out.write(`\t\t${param.name}Persistent = ` +
+							`std::make_shared<Nan::Persistent<v8::Value>>(info[${paramNumber}]);\n`);
+
+						//out.write(`\t\t${param.name}Persistent->Reset(info[${paramNumber}]);\n`);
+					}
+
+					++paramNumber;
+				}
+
+				out.write(`\t}\n`);
+			}
+
 			if (method.async) {
 				out.write('\n');
 				out.write('\treturn [obj');
 
 				for (const param of method.parameters)
+				{
 					out.write(`, ${param.name}`);
+
+					if (param.type.isPointer)
+						out.write(`, ${param.name}Persistent`);
+				}
 
 				out.write(']() {\n');
 
