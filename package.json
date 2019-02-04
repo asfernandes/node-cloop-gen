@@ -1,6 +1,6 @@
 {
   "name": "node-cloop-gen",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1",
   "description": "cloop generator for Node.js",
   "main": "dist/lib/index.js",
   "scripts": {
