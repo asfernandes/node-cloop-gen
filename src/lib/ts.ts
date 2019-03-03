@@ -30,7 +30,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 
 	for (const method of methods) {
 		const genMethod = (async: boolean) => {
-			out.write(`\t${method.name}${method.async && !async ? 'Sync' : 'Async'}(`);
+			out.write(`\t${method.name}${!async ? 'Sync' : 'Async'}(`);
 
 			let paramNumber = 0;
 
@@ -177,9 +177,7 @@ function generateInterface(options: Options, out: NodeJS.WritableStream, intf: I
 		};
 
 		genMethod(false);
-
-		if (method.async)
-			genMethod(true);
+		genMethod(true);
 	}
 
 	out.write('}\n');

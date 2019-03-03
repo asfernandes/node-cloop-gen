@@ -3,7 +3,8 @@ import { Interface, Library, Method } from './library';
 
 export interface Options {
 	library: Library;
-	outputCpp: string;
+	outputCppNan?: string;
+	outputCppNapi?: string;
 	outputTs: string;
 	namespace: string;
 }

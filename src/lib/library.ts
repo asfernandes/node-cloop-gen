@@ -58,7 +58,6 @@ export interface Method {
 	mayThrow: boolean;
 	notImplementedExpr?: Expr;
 	parameters: Parameter[];
-	async?: boolean;
 }
 
 export interface Interface {
