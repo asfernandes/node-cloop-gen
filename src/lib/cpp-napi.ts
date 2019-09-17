@@ -299,7 +299,7 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 							break;
 
 						case 'string':
-							out.write(`${ret1}Napi::Value::From(env, ret)${ret2}`);
+							out.write(`${ret1}ret.isNull() ? env.Null() : Napi::Value::From(env, ret.string())${ret2}`);
 							handled = true;
 							break;
 					}
@@ -351,7 +351,7 @@ function syncReturn(options: Options, type: Type): string {
 	else if (type.name == 'uint64')
 		typeName = 'uint64_t';
 	else if (type.name == 'string')
-		typeName = 'std::string';
+		typeName = 'OptString';
 	else
 		typeName = type.name;
 
