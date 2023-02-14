@@ -268,8 +268,8 @@ export function generateCpp(options: Options, out: NodeJS.WritableStream) {
 				out.write('\treturn env.Undefined();\n');
 
 			let handled = false;
-			let ret1 = '\treturn ';
-			let ret2 = ';\n';
+			const ret1 = '\treturn ';
+			const ret2 = ';\n';
 
 			if (method.returnType.name == 'void' && !method.returnType.isPointer)
 				handled = true;
