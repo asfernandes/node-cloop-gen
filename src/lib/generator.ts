@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { Options } from './common';
 import { generateCppNan } from './cpp-nan';
 import { generateCpp as generateCppNapi } from './cpp-napi';
+import { generateCppJsi } from './cpp-jsi';
 import { generateTs } from './ts';
 
 
@@ -24,6 +25,18 @@ export function generate(options: Options) {
 		try
 		{
 			generateCppNapi(options, outCpp);
+		}
+		finally
+		{
+			outCpp.end();
+		}
+	}
+
+	if (options.outputCppJsi) {
+		const outCpp = fs.createWriteStream(options.outputCppJsi);
+		try
+		{
+			generateCppJsi(options, outCpp);
 		}
 		finally
 		{

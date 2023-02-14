@@ -5,6 +5,7 @@ export interface Options {
 	library: Library;
 	outputCppNan?: string;
 	outputCppNapi?: string;
+	outputCppJsi?: string;
 	outputTs: string;
 	namespace: string;
 }
